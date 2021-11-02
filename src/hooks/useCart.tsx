@@ -74,8 +74,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     } catch (err) {
       if (err.message === 'noStock')
         toast.error('Quantidade solicitada fora de estoque');
-
-      toast.error('Erro na adição do produto');
+      else toast.error('Erro na adição do produto');
     }
   };
 
@@ -91,10 +90,27 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     productId,
     amount,
   }: UpdateProductAmount) => {
-    try {
-      // TODO
-    } catch {
-      // TODO
+    if (amount > 0) {
+      try {
+        const { data: stockItem }: { data: Stock } = await api.get(
+          `stock/${productId}`
+        );
+
+        setCart(
+          cart.map(product => {
+            if (product.id === productId) {
+              if (stockItem.amount >= amount) return { ...product, amount };
+              else throw new Error('noStock');
+            }
+
+            return product;
+          })
+        );
+      } catch (err) {
+        if (err.message === 'noStock')
+          toast.error('Quantidade solicitada fora de estoque');
+        else toast.error('Erro na alteração de quantidade do produto');
+      }
     }
   };
 
