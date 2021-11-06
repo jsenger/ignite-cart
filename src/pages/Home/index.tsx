@@ -4,6 +4,7 @@ import { ProductList } from './styles';
 import { api } from '../../services/api';
 import { formatPrice } from '../../util/format';
 import { useCart } from '../../hooks/useCart';
+import { toast } from 'react-toastify';
 
 interface Product {
   id: number;
@@ -31,16 +32,22 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     async function loadProducts() {
-      api.get('products').then(response => {
-        setProducts(
-          response.data.map((item: Product) => {
-            return {
-              ...item,
-              priceFormatted: formatPrice(item.price),
-            };
-          })
+      try {
+        const { data: products }: { data: Product[] } = await api.get(
+          'products'
         );
-      });
+
+        setProducts(
+          products.map(item => ({
+            ...item,
+            priceFormatted: formatPrice(item.price),
+          }))
+        );
+      } catch {
+        toast.error(
+          'Erro ao carregar produtos. Por favor, atualize a página ou tente novamente mais tarde.'
+        );
+      }
     }
 
     loadProducts();
