@@ -63,7 +63,7 @@ const Cart = (): JSX.Element => {
               </td>
               <td>
                 <strong>{product.title}</strong>
-                <span>R$ {product.priceFormatted}</span>
+                <span>{product.priceFormatted}</span>
               </td>
               <td>
                 <div>
@@ -91,7 +91,7 @@ const Cart = (): JSX.Element => {
                 </div>
               </td>
               <td>
-                <strong>R$ {product.subTotal}</strong>
+                <strong>{product.subTotal}</strong>
               </td>
               <td>
                 <button
@@ -112,7 +112,7 @@ const Cart = (): JSX.Element => {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$ {total}</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
